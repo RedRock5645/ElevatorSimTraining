@@ -12,7 +12,7 @@ public class Constants {
   public static final int kEncoderBChannel = 1;
   public static final int kJoystickPort = 0;
 
-  public static final double kElevatorKp = 5;
+  public static final double kElevatorKp = 1;
   public static final double kElevatorKi = 0;
   public static final double kElevatorKd = 0;
 

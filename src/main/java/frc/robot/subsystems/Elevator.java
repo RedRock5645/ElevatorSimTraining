@@ -32,13 +32,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Elevator implements AutoCloseable {
   // This gearbox represents a gearbox containing 4 Vex 775pro motors.
   private final DCMotor m_elevatorGearbox = DCMotor.getVex775Pro(4);
-
+  public static double kElevatorKp = 1;
+  public static double kElevatorKi = 0;
+  public static double kElevatorKd = 0;
   // Standard classes for controlling our elevator
   private final ProfiledPIDController m_controller =
       new ProfiledPIDController(
-          Constants.kElevatorKp,
-          Constants.kElevatorKi,
-          Constants.kElevatorKd,
+          kElevatorKp,
+          kElevatorKi,
+          kElevatorKd,
           new TrapezoidProfile.Constraints(2.45, 2.45));
   ElevatorFeedforward m_feedforward =
       new ElevatorFeedforward(
@@ -89,6 +91,13 @@ public class Elevator implements AutoCloseable {
 
   /** Advance the simulation. */
   public void simulationPeriodic() {
+    SmartDashboard.putNumber("kElevatorKp: ", kElevatorKp);
+    SmartDashboard.putNumber("kElevatorKi: ", kElevatorKi);
+    SmartDashboard.putNumber("kElevatorKd: ", kElevatorKd);
+
+    kElevatorKp = SmartDashboard.getNumber("kElevatorKp", kElevatorKp);   
+    kElevatorKi = SmartDashboard.getNumber("kElevatorKi", kElevatorKi);
+    kElevatorKd = SmartDashboard.getNumber("kElevatorKd", kElevatorKd);
 
     REVPhysicsSim.getInstance().run();
     // In this method, we update our simulation of what our elevator is doing
