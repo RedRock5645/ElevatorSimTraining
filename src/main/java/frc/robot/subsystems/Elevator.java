@@ -30,6 +30,7 @@ public class Elevator implements AutoCloseable {
   public double m_ElevatorKp = 5;
   public double m_ElevatorKi = 0;
   public double m_ElevatorKd = 0;
+  public double setPoint = 3;
 
   // Standard classes for controlling our elevator
   private final ProfiledPIDController m_controller =
@@ -37,7 +38,8 @@ public class Elevator implements AutoCloseable {
           m_ElevatorKp,
           m_ElevatorKi,
           m_ElevatorKd,
-          new TrapezoidProfile.Constraints(2.45, 2.45));
+          //new TrapezoidProfile.Constraints(2.45, 2.45));
+          new TrapezoidProfile.Constraints(10, 10));
   ElevatorFeedforward m_feedforward =
       new ElevatorFeedforward(
           Constants.kElevatorkS,
@@ -74,6 +76,7 @@ public class Elevator implements AutoCloseable {
     SmartDashboard.putNumber("m_kElevatorKp", m_ElevatorKp);
     SmartDashboard.putNumber("m_kElevatorKi", m_ElevatorKi);
     SmartDashboard.putNumber("m_kElevatorKd", m_ElevatorKd);
+    SmartDashboard.putNumber("Set point", setPoint);
 
     m_encoder.setDistancePerPulse(Constants.kElevatorEncoderDistPerPulse);
 
@@ -87,6 +90,9 @@ public class Elevator implements AutoCloseable {
     m_ElevatorKp = SmartDashboard.getNumber("m_kElevatorKp", m_ElevatorKp);
     m_ElevatorKi = SmartDashboard.getNumber("m_kElevatorKi", m_ElevatorKi);
     m_ElevatorKd = SmartDashboard.getNumber("m_kElevatorKd", m_ElevatorKd);
+    setPoint = SmartDashboard.getNumber("Set point", setPoint);
+
+    reachGoal(setPoint);
 
     m_controller.setP(m_ElevatorKp);
     m_controller.setI(m_ElevatorKi);
